@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eSIM料金プラン</title>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      background: white;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 640px;
+      background: #f5f5f5;
+      border-radius: 12px;
+      padding: 40px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .price-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      margin-bottom: 24px;
+    }
+    #plan.price {
+      font-weight: bold;
+      text-align: left;
+      font-size: 28px;
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+    }
+    #plan-price {
+      font-size: 28px;
+      font-weight: bold;
+      position: relative;
+    }
+    .price::before {
+      content: "";
+      width: 150px;
+      height: 1px;
+      background: #ccc;
+      margin-right: 8px;
+    }
+    #plan-price::before {
+      content: "";
+      position: absolute;
+      left: -150px;
+      top: 50%;
+      width: 150px;
+      height: 2px;
+      background: #ccc;
+      transform: translateY(-50%);
+    }
+    h2 {
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+    ul {
+      padding-left: 20px;
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+    .section-divider {
+      border-top: 2px solid #45c164;
+      margin-top: 32px;
+      margin-bottom: 24px;
+    }
+    .options-row {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .option-group {
+      flex: 1;
+      text-align: left;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .subtext {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 4px;
+      white-space: nowrap;
+    }
+    select, input[type="number"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 100%;
+      height: 40px;
+      font-size: 16px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    .price {
+      font-weight: bold;
+      text-align: left;
+      font-size: 28px;
+      margin-top: 24px;
+      position: relative;
+    }
+    .price::before {
+      content: "";
+      display: inline-block;
+      width: 100px;
+      height: 1px;
+      background: #ccc;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    .button-wrapper {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .btn {
+      background: #45c164;
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+    .btn:hover {
+      background: #3ab158;
+    }
+
+    @media (max-width: 490px) {
+      .container {
+        padding: 20px;
+        min-height: 1000px;
+      }
+      .price-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .options-row {
+        flex-direction: column;
+        gap: 16px;
+      }
+      .price::before,
+      #plan-price::before {
+        width: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="price-top">
+      <h1 id="plan-title">韓国eSIM</h1>
+      <div id="plan-price">¥000</div>
+    </div>
+    <p id="description">韓国国内で利用できるプリペイドeSIMです。すぐ使えて便利。</p>
+
+    <h2>■メリット</h2>
+    <ul>
+      <li>即時発行・すぐ使える</li>
+      <li>QRコードで簡単開通</li>
+      <li>日本語サポートあり</li>
+    </ul>
+
+    <h2>■概要</h2>
+    <ul>
+      <li>対象国：韓国</li>
+      <li>高速4G LTE回線</li>
+      <li>通話・SMSなしのデータ専用</li>
+    </ul>
+
+    <h2>■仕様</h2>
+    <ul>
+      <li>キャリア：KT / LG U+</li>
+      <li>利用可能端末：eSIM対応スマホ</li>
+      <li>テザリング：可能</li>
+    </ul>
+
+    <div class="section-divider"></div>
+
+    <div class="options-row">
+      <div class="option-group">
+        <label for="days">利用日数</label>
+        <div class="subtext">利用日数が長いほどお得になります。</div>
+        <select id="days"></select>
+      </div>
+      <div class="option-group">
+        <label for="quantity">eSIMの数量</label>
+        <div class="subtext">何名様分ご入用ですか？</div>
+        <input type="number" id="quantity" value="1" min="1" />
+      </div>
+    </div>
+
+    <div class="price" id="total-price">合計 ¥000</div>
+
+    <div class="button-wrapper" id="linkDisplay"></div>
+  </div>
+
+<script>
+  const sheetId = '1zlcduLGSM2ctjKhb07ODH03RKPAFzG87NQZl6P8phbk';
+  const plan = 'Korea';
+  const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${plan}`;
+
+  fetch(sheetURL)
+    .then(res => res.text())
+    .then(text => {
+      const json = JSON.parse(text.substr(47).slice(0, -2));
+      const rows = json.table.rows;
+      const daysSelect = document.getElementById('days');
+      let lastPrice = 0;
+      rows.forEach(row => {
+        const day = row.c[12]?.v;
+        const price = row.c[14]?.v;
+        if (day && price) {
+          const option = document.createElement('option');
+          option.value = price;
+          option.textContent = `${day}日`;
+          daysSelect.appendChild(option);
+          lastPrice = price;
+        }
+      });
+
+      function updateTotal() {
+        const selectedPrice = Number(daysSelect.value) || 0;
+        const quantity = Number(document.getElementById('quantity').value) || 1;
+        const total = selectedPrice * quantity;
+        document.getElementById('total-price').textContent = `合計 ¥${total.toLocaleString()}`;
+        document.getElementById('plan-price').textContent = `¥${(selectedPrice * quantity).toLocaleString()}`;
+      }
+
+      daysSelect.addEventListener('change', updateTotal);
+      document.getElementById('quantity').addEventListener('input', updateTotal);
+      updateTotal();
+
+      const matchURL = rows[0].c[15]?.v;
+      if (matchURL) {
+        document.getElementById('linkDisplay').innerHTML = `
+          <a href="${matchURL}" target="_blank">
+            <button class="btn">このプランを購入する</button>
+          </a>
+        `;
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById('description').textContent = 'データの読み込みに失敗しました';
+    });
+</script>
+</body>
+</html>
