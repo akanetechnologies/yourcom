@@ -32,26 +32,12 @@
       font-weight: bold;
       margin-bottom: 24px;
     }
-    #plan.price {
-      font-weight: bold;
-      text-align: left;
-      font-size: 28px;
-      margin-top: 24px;
-      display: flex;
-      align-items: center;
-    }
     #plan-price {
       font-size: 28px;
       font-weight: bold;
       position: relative;
     }
-    .price::before {
-      content: "";
-      width: 150px;
-      height: 1px;
-      background: #ccc;
-      margin-right: 8px;
-    }
+    .price::before,
     #plan-price::before {
       content: "";
       position: absolute;
@@ -169,30 +155,30 @@
 <body>
   <div class="container">
     <div class="price-top">
-      <h1 id="plan-title">韓国eSIM</h1>
+      <h1 id="plan-title">eSIMプラン</h1>
       <div id="plan-price">¥000</div>
     </div>
-    <p id="description">韓国国内で利用できるプリペイドeSIMです。すぐ使えて便利。</p>
+    <p id="description">ここにテキストが入ります。</p>
 
     <h2>■メリット</h2>
     <ul>
-      <li>即時発行・すぐ使える</li>
-      <li>QRコードで簡単開通</li>
-      <li>日本語サポートあり</li>
+      <li>海外旅行中もすぐに通信が使える</li>
+      <li>SIMカード不要でスマホひとつで完結</li>
+      <li>到着前に設定すればすぐ使える</li>
     </ul>
 
     <h2>■概要</h2>
     <ul>
-      <li>対象国：韓国</li>
-      <li>高速4G LTE回線</li>
-      <li>通話・SMSなしのデータ専用</li>
+      <li>データ通信専用のプリペイドeSIM</li>
+      <li>テザリング可能（端末による）</li>
+      <li>アクティベートからカウント開始</li>
     </ul>
 
     <h2>■仕様</h2>
     <ul>
-      <li>キャリア：KT / LG U+</li>
-      <li>利用可能端末：eSIM対応スマホ</li>
-      <li>テザリング：可能</li>
+      <li>対応端末：iPhone XS以降 / 一部Android</li>
+      <li>有効期間：選択日数</li>
+      <li>通信速度：高速データ制限後は低速</li>
     </ul>
 
     <div class="section-divider"></div>
@@ -215,55 +201,65 @@
     <div class="button-wrapper" id="linkDisplay"></div>
   </div>
 
-<script>
-  const sheetId = '1zlcduLGSM2ctjKhb07ODH03RKPAFzG87NQZl6P8phbk';
-  const plan = 'Korea';
-  const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${plan}`;
+  <script>
+    let plan = new URLSearchParams(window.location.search).get('plan');
+    if (!plan) {
+      plan = window.location.pathname.split('/').pop();
+    }
 
-  fetch(sheetURL)
-    .then(res => res.text())
-    .then(text => {
-      const json = JSON.parse(text.substr(47).slice(0, -2));
-      const rows = json.table.rows;
-      const daysSelect = document.getElementById('days');
-      let lastPrice = 0;
-      rows.forEach(row => {
-        const day = row.c[12]?.v;
-        const price = row.c[14]?.v;
-        if (day && price) {
-          const option = document.createElement('option');
-          option.value = price;
-          option.textContent = `${day}日`;
-          daysSelect.appendChild(option);
-          lastPrice = price;
+    const sheetId = '1zlcduLGSM2ctjKhb07ODH03RKPAFzG87NQZl6P8phbk';
+    const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${plan}`;
+
+    fetch(sheetURL)
+      .then(res => res.text())
+      .then(text => {
+        const json = JSON.parse(text.substr(47).slice(0, -2));
+        const rows = json.table.rows;
+        const firstRow = rows[0].c;
+
+        document.getElementById('plan-title').textContent = firstRow[0]?.v || 'eSIMプラン';  // 国名
+        document.getElementById('description').textContent = firstRow[2]?.v || '';         // 説明
+
+        const daysSelect = document.getElementById('days');
+        let lastPrice = 0;
+
+        rows.forEach(row => {
+          const day = row.c[3]?.v;  // 利用日数
+          const price = row.c[5]?.v; // 金額
+          if (day && price) {
+            const option = document.createElement('option');
+            option.value = price;
+            option.textContent = `${day}日`;
+            daysSelect.appendChild(option);
+            lastPrice = price;
+          }
+        });
+
+        function updateTotal() {
+          const selectedPrice = Number(daysSelect.value) || 0;
+          const quantity = Number(document.getElementById('quantity').value) || 1;
+          const total = selectedPrice * quantity;
+          document.getElementById('total-price').textContent = `合計 ¥${total.toLocaleString()}`;
+          document.getElementById('plan-price').textContent = `¥${(selectedPrice * quantity).toLocaleString()}`;
         }
+
+        daysSelect.addEventListener('change', updateTotal);
+        document.getElementById('quantity').addEventListener('input', updateTotal);
+        updateTotal();
+
+        const matchURL = firstRow[6]?.v;
+        if (matchURL) {
+          document.getElementById('linkDisplay').innerHTML = `
+            <a href="${matchURL}" target="_blank">
+              <button class="btn">このプランを購入する</button>
+            </a>
+          `;
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('description').textContent = 'データの読み込みに失敗しました';
       });
-
-      function updateTotal() {
-        const selectedPrice = Number(daysSelect.value) || 0;
-        const quantity = Number(document.getElementById('quantity').value) || 1;
-        const total = selectedPrice * quantity;
-        document.getElementById('total-price').textContent = `合計 ¥${total.toLocaleString()}`;
-        document.getElementById('plan-price').textContent = `¥${(selectedPrice * quantity).toLocaleString()}`;
-      }
-
-      daysSelect.addEventListener('change', updateTotal);
-      document.getElementById('quantity').addEventListener('input', updateTotal);
-      updateTotal();
-
-      const matchURL = rows[0].c[15]?.v;
-      if (matchURL) {
-        document.getElementById('linkDisplay').innerHTML = `
-          <a href="${matchURL}" target="_blank">
-            <button class="btn">このプランを購入する</button>
-          </a>
-        `;
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      document.getElementById('description').textContent = 'データの読み込みに失敗しました';
-    });
-</script>
+  </script>
 </body>
 </html>
