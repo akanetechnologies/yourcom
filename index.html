@@ -86,7 +86,7 @@
       margin-bottom: 4px;
       white-space: nowrap;
     }
-    select, input[type="number"] {
+    select, input[type="number"], input[type="date"] {
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 8px;
@@ -183,6 +183,11 @@
 
     <div class="section-divider"></div>
 
+    <div class="option-group" style="margin-bottom: 24px;">
+      <label for="start-date">開始日</label>
+      <input type="date" id="start-date" />
+    </div>
+
     <div class="options-row">
       <div class="option-group">
         <label for="days">利用日数</label>
@@ -217,15 +222,15 @@
         const rows = json.table.rows;
         const firstRow = rows[0].c;
 
-        document.getElementById('plan-title').textContent = firstRow[0]?.v || 'eSIMプラン';  // 国名
-        document.getElementById('description').textContent = firstRow[2]?.v || '';         // 説明
+        document.getElementById('plan-title').textContent = firstRow[0]?.v || 'eSIMプラン';
+        document.getElementById('description').textContent = firstRow[2]?.v || '';
 
         const daysSelect = document.getElementById('days');
         let lastPrice = 0;
 
         rows.forEach(row => {
-          const day = row.c[3]?.v;  // 利用日数
-          const price = row.c[5]?.v; // 金額
+          const day = row.c[3]?.v;
+          const price = row.c[5]?.v;
           if (day && price) {
             const option = document.createElement('option');
             option.value = price;
