@@ -6,19 +6,22 @@
   <title>eSIM料金プラン</title>
   <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      background: white;
+    html, body {
       margin: 0;
       padding: 0;
+      background: white;
+    }
+    body {
+      font-family: 'Zen Kaku Gothic New', sans-serif;
     }
     .container {
+      width: 100%;
       max-width: 640px;
       background: #f5f5f5;
       border-radius: 12px;
       padding: 40px;
-      margin: 0 auto;
       box-sizing: border-box;
+      margin: 0 auto;
     }
     h1 {
       font-size: 28px;
@@ -37,16 +40,22 @@
       font-weight: bold;
       position: relative;
     }
-    .price::before,
-    #plan-price::before {
+    .price {
+      font-weight: bold;
+      text-align: left;
+      font-size: 28px;
+      margin-top: 40px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .price::before {
       content: "";
-      position: absolute;
-      left: -150px;
-      top: 50%;
-      width: 150px;
-      height: 2px;
+      display: inline-block;
+      width: 100px;
+      height: 1px;
       background: #ccc;
-      transform: translateY(-50%);
+      margin-right: 12px;
     }
     h2 {
       font-size: 16px;
@@ -96,22 +105,6 @@
       box-sizing: border-box;
       text-align: center;
     }
-    .price {
-      font-weight: bold;
-      text-align: left;
-      font-size: 28px;
-      margin-top: 24px;
-      position: relative;
-    }
-    .price::before {
-      content: "";
-      display: inline-block;
-      width: 100px;
-      height: 1px;
-      background: #ccc;
-      margin-right: 8px;
-      vertical-align: middle;
-    }
     .button-wrapper {
       text-align: center;
       margin-top: 20px;
@@ -134,7 +127,7 @@
     @media (max-width: 490px) {
       .container {
         padding: 20px;
-        min-height: 1000px;
+        border-radius: 0;
       }
       .price-top {
         flex-direction: column;
@@ -145,8 +138,10 @@
         flex-direction: column;
         gap: 16px;
       }
-      .price::before,
-      #plan-price::before {
+      .option-group {
+        width: 100%;
+      }
+      .price::before {
         width: 60px;
       }
     }
